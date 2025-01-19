@@ -98,10 +98,13 @@ void karke_dekhte_hain(){
     vector<vector<ll>> v;
     vector<ll> a,b;
     string s,s1,s2;
-    cin>>n>>m>>k;
-    deb3(n,m,k);
-    if(abs(m-k)%2==0) cout<<"YES\n";
-    else cout<<"NO\n";
+    ll a1,a2,a3,a4,a5;
+    cin>>a1>>a2>>a4>>a5;
+    set<ll> st;
+    st.insert(a1+a2);
+    st.insert(a4-a2);
+    st.insert(a5-a4);
+    cout<<3-st.size()+1<<endl;
 }
 
 int main() {
