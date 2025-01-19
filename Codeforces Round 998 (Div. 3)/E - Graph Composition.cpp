@@ -90,18 +90,72 @@ const int mod1 = 998244353;
 const int N = 3e5, M = N;
 
 vi g[N];
-
+vi g1[N];
 //fahad.cpp
 
+void gooddfs(int curr,vector<ll>& vis,int currbaap,map<ll,ll>& baap){
+    baap[curr]=currbaap;
+    vis[curr]=1;
+    for(int i=0;i<g1[curr].size();i++){
+        if(vis[g1[curr][i]]==0) gooddfs(g1[curr][i],vis,currbaap,baap);
+    }
+}
+
+void baddfs(int curr,vector<ll>& vis2,int currbaap,map<ll,ll>& baap2){
+    baap2[curr]=currbaap;
+    vis2[curr]=1;
+    for(int i=0;i<g[curr].size();i++){
+        if(vis2[g[curr][i]]==0) baddfs(g[curr][i],vis2,currbaap,baap2);
+    }
+}
+
 void karke_dekhte_hain(){
-    ll i=0,j=0,k=0,q=0,n=0,m=0,count=0;
+    ll i=0,m1,m2,j=0,k=0,q=0,n=0,m=0,count=0;
     vector<vector<ll>> v;
     vector<ll> a,b;
     string s,s1,s2;
-    cin>>n>>m>>k;
-    deb3(n,m,k);
-    if(abs(m-k)%2==0) cout<<"YES\n";
-    else cout<<"NO\n";
+    cin>>n;
+    cin>>m1;
+    cin>>m2;
+    vector<pair<ll,ll>> mp1;
+    for(int i=0;i<m1;i++){
+        cin>>j>>k;
+        mp1.pb({j-1,k-1});
+    }
+    for(int i=0;i<m2;i++){
+        cin>>j>>k;
+        g1[j-1].pb(k-1);
+        g1[k-1].pb(j-1);
+    }
+    map<ll,ll> baap;
+    vector<ll> vis(n,0);
+    for(int i=0;i<n;i++){
+        if(vis[i]==0) gooddfs(i,vis,i,baap);
+    }
+    for(int i=0;i<m1;i++){
+        if(baap[mp1[i].F]!=baap[mp1[i].S]) count++;
+        else{
+            g[mp1[i].F].pb(mp1[i].S);
+            g[mp1[i].S].pb(mp1[i].F);
+        }
+    }
+    map<ll,ll> baap2;
+    vector<ll> vis2(n,0);
+    for(int i=0;i<n;i++){
+        if(vis2[i]==0) baddfs(i,vis2,i,baap2);
+    }
+    map<ll,set<ll>> useful;
+    for(int i=0;i<n;i++){
+        useful[baap[i]].insert(baap2[i]);
+    }
+    for(auto it: useful){
+        count+=(it.S.size()-1);
+    }
+    for(int i=0;i<n;i++){
+        g[i].clear();
+        g1[i].clear();
+    }
+    cout<<count<<endl;
 }
 
 int main() {
