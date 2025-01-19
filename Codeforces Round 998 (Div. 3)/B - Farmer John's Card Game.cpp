@@ -98,10 +98,28 @@ void karke_dekhte_hain(){
     vector<vector<ll>> v;
     vector<ll> a,b;
     string s,s1,s2;
-    cin>>n>>m>>k;
-    deb3(n,m,k);
-    if(abs(m-k)%2==0) cout<<"YES\n";
-    else cout<<"NO\n";
+    cin>>n>>m;
+    int pos=-1;
+    for(int i=0;i<n;i++){
+        vector<ll> a1;
+        for(int j=0;j<m;j++){
+            cin>>k;
+            a1.pb(k);
+        }
+        sort(all(a1));
+        v.pb(a1);
+    }
+    vector<ll> ans(n,0);
+    for(int i=0;i<n;i++){
+        ans[v[i][0]]=i+1;
+        for(int j=1;j<m;j++){
+            if(v[i][j]-v[i][j-1]!=n){
+                cout<<"-1\n";
+                return;
+            }
+        }
+    }
+    prnt(ans);
 }
 
 int main() {
