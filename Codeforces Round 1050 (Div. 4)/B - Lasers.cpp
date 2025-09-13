@@ -98,8 +98,12 @@ void karke_dekhte_hain(){
     vector<vector<ll>> v;
     vector<ll> a,b;
     string s,s1,s2;
-    cin>>n;
-    cout<<2*n<<endl;
+    cin>>n>>m;
+    cout<<n+m<<endl;
+    cin>>k>>q;
+    for(int i=0;i<n+m;i++){
+        cin>>j;
+    }
 }
 
 int main() {
