@@ -98,54 +98,37 @@ void karke_dekhte_hain(){
     vector<vector<ll>> v;
     vector<ll> a,b;
     string s,s1,s2;
-    cin>>n;
+    cin>>n>>m;
     for(int i=0;i<n;i++){
         cin>>j;
         a.pb(j);
+        cin>>j;
+        b.pb(j);
     }
-    set<ll> normalseteven;
-    set<ll> valuesetodd;
-    set<ll> normalsetodd;
-    set<ll,greater<ll>> valueseteven;
-    valuesetodd.insert(2*a[0]+1);
-    normalsetodd.insert(1);
     ll ans=0;
-    for(int i=2;i<=n;i++){
-        if(i%2==0){
-            if(valuesetodd.size()){ //sdfsd
-                auto it=*(valuesetodd.begin());
-                ll currans=2*a[i-1]+i-it;
-                ans=max(ans,currans);
+    ll lastpos=0,lastval=0;
+    for(int i=0;i<n;i++){
+        if((a[i]-lastpos)%2==0){
+            if(lastval!=b[i]){
+                ans+=(a[i]-lastpos-1);
             }
-            if(normalseteven.size()!=0){ //sdfsd
-                auto it=*(normalseteven.begin());
-                ll currans=i-it;
-                ans=max(ans,currans);
+            else{
+                ans+=(a[i]-lastpos);
             }
-            normalseteven.insert(i); //sdfsd
-            valueseteven.insert(2*a[i-1]-i); //sdfsd
         }
         else{
-            if(valueseteven.size()){
-                auto it=*(valueseteven.begin());
-                ll currans=-2*a[i-1]+i+it; //sdfsd
-                ans=max(ans,currans);
+            if(lastval!=b[i]){
+                ans+=(a[i]-lastpos);
             }
-            if(normalsetodd.size()!=0){ //sdfsd
-                auto it=*(normalsetodd.begin());
-                ll currans=i-it;
-                ans=max(ans,currans);
+            else{
+                ans+=(a[i]-lastpos-1);
             }
-            normalsetodd.insert(i); //sdfsd
-            valuesetodd.insert(2*a[i-1]+i); //sdfsd
         }
+        lastpos=a[i];
+        lastval=b[i];
     }
-    ll cre=0;
-    for(int i=0;i<n;i++){
-        if(i%2==0) cre+=a[i];
-        else cre-=a[i];
-    }
-    cout<<cre+ans<<endl;
+    ans+=m-lastpos;
+    cout<<ans<<endl;
 }
 
 int main() {
