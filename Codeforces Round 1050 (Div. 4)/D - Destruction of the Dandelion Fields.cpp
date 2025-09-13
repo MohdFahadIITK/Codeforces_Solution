@@ -99,13 +99,27 @@ void karke_dekhte_hain(){
     vector<ll> a,b;
     string s,s1,s2;
     cin>>n;
-    cin>>s;
-    s1=s;
-    sort(all(s1));
     for(int i=0;i<n;i++){
-        if(s[i]!=s1[i]) count++;
+        cin>>j;
+        a.pb(j);
     }
-    cout<<count/2<<endl;
+    ll noo=0;
+    ll evensum=0;
+    for(int i=0;i<n;i++){
+        if(a[i]%2==0){
+            evensum+=a[i];
+        }
+        else b.pb(a[i]);
+    }
+    if(b.size()==0) cout<<0<<endl;
+    else{
+        sort(all(b));
+        for(int i=0;i<(b.size()+1)/2;i++){
+            noo+=b[b.size()-1-i];
+        }
+        noo+=evensum;
+        cout<<noo<<endl;
+    }
 }
 
 int main() {
