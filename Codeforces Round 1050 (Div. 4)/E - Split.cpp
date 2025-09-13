@@ -98,8 +98,54 @@ void karke_dekhte_hain(){
     vector<vector<ll>> v;
     vector<ll> a,b;
     string s,s1,s2;
-    cin>>n;
-    cout<<2*n<<endl;
+    cin>>n>>k;
+    for(int i=0;i<n;i++){
+        cin>>j;
+        a.pb(j);
+    }
+    map<ll,ll> old_counter,counter;
+    for(int i=0;i<n;i++){
+        old_counter[a[i]]++;
+    }
+    set<ll> st;
+    map<ll,ll> vis;
+    for(int i=0;i<n;i++){
+        if(old_counter[a[i]]%k==0){
+            counter[a[i]]=old_counter[a[i]]/k;
+        }
+        else{
+            cout<<"0\n";
+            return;
+        }
+    }
+    ll ans=0;
+    for(int i=0;i<n;i++){
+        b.pb(a[i]);
+    }
+    if(b.size()>0){
+        map<ll,ll> currcount;
+        ll left=0;
+        ll right=1;
+        currcount[b[0]]=1;
+        while(left<b.size()){
+            if(right==b.size()){
+                ll p=right-left;
+                ans+=(p*(p+1))/2;
+                break;
+            }
+            if(currcount[b[right]]+1<=counter[b[right]]){
+                currcount[b[right]]++;
+                right++;
+            }
+            else{
+                ans+=right-left;
+                currcount[b[left]]--;
+                left++;
+            }
+        }
+        b.clear();
+    }
+    cout<<ans<<endl;
 }
 
 int main() {
