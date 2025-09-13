@@ -96,56 +96,43 @@ vi g[N];
 void karke_dekhte_hain(){
     ll i=0,j=0,k=0,q=0,n=0,m=0,count=0;
     vector<vector<ll>> v;
-    vector<ll> a,b;
     string s,s1,s2;
     cin>>n;
+    vector<vector<ll>> vp;
+    ll msize=0;
     for(int i=0;i<n;i++){
-        cin>>j;
-        a.pb(j);
-    }
-    set<ll> normalseteven;
-    set<ll> valuesetodd;
-    set<ll> normalsetodd;
-    set<ll,greater<ll>> valueseteven;
-    valuesetodd.insert(2*a[0]+1);
-    normalsetodd.insert(1);
-    ll ans=0;
-    for(int i=2;i<=n;i++){
-        if(i%2==0){
-            if(valuesetodd.size()){ //sdfsd
-                auto it=*(valuesetodd.begin());
-                ll currans=2*a[i-1]+i-it;
-                ans=max(ans,currans);
-            }
-            if(normalseteven.size()!=0){ //sdfsd
-                auto it=*(normalseteven.begin());
-                ll currans=i-it;
-                ans=max(ans,currans);
-            }
-            normalseteven.insert(i); //sdfsd
-            valueseteven.insert(2*a[i-1]-i); //sdfsd
+        ll k;
+        cin>>k;
+        vector<ll> vip;
+        for(int j=0;j<k;j++){
+            cin>>q;
+            vip.pb(q);
         }
-        else{
-            if(valueseteven.size()){
-                auto it=*(valueseteven.begin());
-                ll currans=-2*a[i-1]+i+it; //sdfsd
-                ans=max(ans,currans);
-            }
-            if(normalsetodd.size()!=0){ //sdfsd
-                auto it=*(normalsetodd.begin());
-                ll currans=i-it;
-                ans=max(ans,currans);
-            }
-            normalsetodd.insert(i); //sdfsd
-            valuesetodd.insert(2*a[i-1]+i); //sdfsd
+        vp.pb(vip);
+        msize=max(msize,k);
+    }
+    vector<ll> ans(msize,0);
+    ll lastfill=0;
+    while(vp.size()){
+        sort(all(vp));
+        for(int i=0;i<vp[0].size();i++){
+            ans[i+lastfill]=vp[0][i];
         }
+        lastfill+=vp[0].size();
+        vector<vector<ll>> vrp;
+        for(int i=0;i<vp.size();i++){
+            if(vp[i].size()>vp[0].size()){
+                vector<ll> ytr;
+                for(int j=vp[0].size();j<vp[i].size();j++){
+                    ytr.pb(vp[i][j]);
+                }
+                vrp.pb(ytr);
+            }
+        }
+        vp=vrp;
     }
-    ll cre=0;
-    for(int i=0;i<n;i++){
-        if(i%2==0) cre+=a[i];
-        else cre-=a[i];
-    }
-    cout<<cre+ans<<endl;
+    prnt(ans);
+    prnt(vp);
 }
 
 int main() {
