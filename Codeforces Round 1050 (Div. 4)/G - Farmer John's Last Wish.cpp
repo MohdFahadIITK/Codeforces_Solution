@@ -102,40 +102,82 @@ void getmultiple(){
         }
     }
 }
-void karke_dekhte_hain(){
-    ll i=0,j=0,k=0,q=0,n=0,m=0,count=0;
-    vector<vector<ll>> v;
-    string s,s1,s2;
-    cin>>n;
-    vector<ll> a;
-    for(int i=0;i<n;i++){
-        cin>>j;
-        a.pb(j);
+
+struct SegTree {
+    int n;
+    vector<int> t;
+    void init(int N) {
+        n = 1;
+        while (n < N) n <<= 1;
+        t.assign(2 * n, 0);
     }
-    vector<ll> ans(n,0);
-    vector<ll> gcd(n,0);
-    vector<ll> countdivisor(N1+1,0);
-    gcd[0]=a[0];
-    for(int i=0;i<n;i++){
-        ll currans=0;
-        if(i>0){
-            currans=ans[i-1];
-            gcd[i]=GCD(gcd[i-1],a[i]);
-        }
-        for(auto it: multip[a[i]]){
-            countdivisor[it]++;
-            if(it>gcd[i]) currans=max(currans,countdivisor[it]);
-        }
-        if(i>0) for(int j=gcd[i]+1;j<=gcd[i-1];j++) currans=max(currans,countdivisor[j]);
-        ans[i]=currans;
+    inline void point_set(int p, int val) {
+        p += n;
+        t[p] = val;
+        for (p >>= 1; p; p >>= 1) t[p] = max(t[p<<1], t[p<<1|1]);
     }
+    inline int range_max(int l, int r) {
+        if (l > r) return 0;
+        l += n; r += n;
+        int res = 0;
+        while (l <= r) {
+            if (l & 1) res = max(res, t[l++]);
+            if (!(r & 1)) res = max(res, t[r--]);
+            l >>= 1; r >>= 1;
+        }
+        return res;
+    }
+} seg;
+
+void karke_dekhte_hain() {
+    ll n; 
+    cin >> n;
+    vector<ll> a(n);
+    for (int i = 0; i < n; i++) cin >> a[i];
+
+    vector<ll> ans(n, 0);
+    vector<ll> gcdv(n, 0);
+
+    static ll countdivisor[N1];
+    vector<ll> touched;
+
+    gcdv[0]=a[0];
+
+    for(int i=0;i<n;i++) {
+        ll currans=(i>0?ans[i-1]:0);
+        if(i>0) gcdv[i]=GCD(gcdv[i-1],a[i]);
+
+        
+        for (auto d : multip[a[i]]) {
+            if (countdivisor[d] == 0) touched.push_back(d);
+            countdivisor[d]++;
+            seg.point_set(d, countdivisor[d]); 
+        }
+
+        ll L=gcdv[i]+1;
+        if(L<2) L=2;
+        ll q=(L<=N1-1)?seg.range_max(L, N1-1):0;
+        currans=max(currans,(ll)q);
+
+        ans[i] = currans;
+    }
+
+    for (int d : touched) {
+        countdivisor[d]=0;
+        seg.point_set(d,0);
+    }
+
     prnt(ans);
 }
+
+
+
 
 int main() {
     ios_base::sync_with_stdio(0), cin.tie(0), cout.tie(0);
     srand(chrono::high_resolution_clock::now().time_since_epoch().count());
     getmultiple();
+    seg.init(N1);
     int t=1;
     cin>>t;
     while(t--){
