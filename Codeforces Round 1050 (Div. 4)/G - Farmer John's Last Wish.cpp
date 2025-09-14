@@ -88,70 +88,54 @@ ll nCr(ll n,ll r, ll M);
 const int mod = 1000000007;
 const int mod1 = 998244353;
 const int N = 3e5, M = N;
-
+const int N1 = 200001;
 vi g[N];
 
 //fahad.cpp
 
+vector<ll> multip[N1];
+ 
+void getmultiple(){
+    for(ll i=2;i<N1;i++){
+        for(ll j=i;j<N1;j+=i){
+            multip[j].pb(i);
+        }
+    }
+}
 void karke_dekhte_hain(){
     ll i=0,j=0,k=0,q=0,n=0,m=0,count=0;
     vector<vector<ll>> v;
-    vector<ll> a,b;
     string s,s1,s2;
     cin>>n;
+    vector<ll> a;
     for(int i=0;i<n;i++){
         cin>>j;
         a.pb(j);
     }
-    set<ll> normalseteven;
-    set<ll> valuesetodd;
-    set<ll> normalsetodd;
-    set<ll,greater<ll>> valueseteven;
-    valuesetodd.insert(2*a[0]+1);
-    normalsetodd.insert(1);
-    ll ans=0;
-    for(int i=2;i<=n;i++){
-        if(i%2==0){
-            if(valuesetodd.size()){ //sdfsd
-                auto it=*(valuesetodd.begin());
-                ll currans=2*a[i-1]+i-it;
-                ans=max(ans,currans);
-            }
-            if(normalseteven.size()!=0){ //sdfsd
-                auto it=*(normalseteven.begin());
-                ll currans=i-it;
-                ans=max(ans,currans);
-            }
-            normalseteven.insert(i); //sdfsd
-            valueseteven.insert(2*a[i-1]-i); //sdfsd
-        }
-        else{
-            if(valueseteven.size()){
-                auto it=*(valueseteven.begin());
-                ll currans=-2*a[i-1]+i+it; //sdfsd
-                ans=max(ans,currans);
-            }
-            if(normalsetodd.size()!=0){ //sdfsd
-                auto it=*(normalsetodd.begin());
-                ll currans=i-it;
-                ans=max(ans,currans);
-            }
-            normalsetodd.insert(i); //sdfsd
-            valuesetodd.insert(2*a[i-1]+i); //sdfsd
-        }
-    }
-    ll cre=0;
+    vector<ll> ans(n,0);
+    vector<ll> gcd(n,0);
+    vector<ll> countdivisor(N1+1,0);
+    gcd[0]=a[0];
     for(int i=0;i<n;i++){
-        if(i%2==0) cre+=a[i];
-        else cre-=a[i];
+        ll currans=0;
+        if(i>0){
+            currans=ans[i-1];
+            gcd[i]=GCD(gcd[i-1],a[i]);
+        }
+        for(auto it: multip[a[i]]){
+            countdivisor[it]++;
+            if(it>gcd[i]) currans=max(currans,countdivisor[it]);
+        }
+        if(i>0) for(int j=gcd[i]+1;j<=gcd[i-1];j++) currans=max(currans,countdivisor[j]);
+        ans[i]=currans;
     }
-    cout<<cre+ans<<endl;
+    prnt(ans);
 }
 
 int main() {
     ios_base::sync_with_stdio(0), cin.tie(0), cout.tie(0);
     srand(chrono::high_resolution_clock::now().time_since_epoch().count());
-    
+    getmultiple();
     int t=1;
     cin>>t;
     while(t--){
