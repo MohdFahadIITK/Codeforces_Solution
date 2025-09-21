@@ -98,8 +98,28 @@ void karke_dekhte_hain(){
     vector<vector<ll>> v;
     vector<ll> a,b;
     string s,s1,s2;
-    cin>>n>>m;
-    cout<<(m%2)*n<<endl;
+    cin>>n;
+    fo(i,n){
+        cin>>j;
+        a.pb(j);
+    }
+    set<ll> st;
+    map<ll,ll> mp;
+    for(int i=0;i<n;i++){
+        mp[a[i]]++;
+        st.insert(a[i]);
+    }
+    ll mtt=st.size();
+    for(auto it: st){
+        ll cnt=0;
+        for(auto it1 : st){
+            if(mp[it1]>=mp[it]){
+                cnt++;
+            }
+        }
+        mtt=max(mtt,mp[it]*cnt);
+    }
+    cout<<mtt<<endl;
 }
 
 int main() {
