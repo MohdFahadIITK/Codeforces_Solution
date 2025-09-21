@@ -99,53 +99,45 @@ void karke_dekhte_hain(){
     vector<ll> a,b;
     string s,s1,s2;
     cin>>n;
-    for(int i=0;i<n;i++){
-        cin>>j;
-        a.pb(j);
+    cin>>s;
+    s1="1";
+    s1+=s;
+    s1+="1";
+    ll cnt=1;
+    for(int i=2;i<s1.size();i++){
+        if(s1[i-2]=='1'&&s1[i-1]=='0'&&s1[i]=='1'){
+            cout<<"NO\n";
+            return;
+        }
     }
-    set<ll> normalseteven;
-    set<ll> valuesetodd;
-    set<ll> normalsetodd;
-    set<ll,greater<ll>> valueseteven;
-    valuesetodd.insert(2*a[0]+1);
-    normalsetodd.insert(1);
-    ll ans=0;
-    for(int i=2;i<=n;i++){
-        if(i%2==0){
-            if(valuesetodd.size()){ //sdfsd
-                auto it=*(valuesetodd.begin());
-                ll currans=2*a[i-1]+i-it;
-                ans=max(ans,currans);
-            }
-            if(normalseteven.size()!=0){ //sdfsd
-                auto it=*(normalseteven.begin());
-                ll currans=i-it;
-                ans=max(ans,currans);
-            }
-            normalseteven.insert(i); //sdfsd
-            valueseteven.insert(2*a[i-1]-i); //sdfsd
+    queue<ll> qt;
+    stack<ll> st;
+    vector<ll> ans(n,0);
+    for(int i=0;i<n;i++){
+        if(s[i]=='0'){
+            qt.push(i);
+            st.push(i+1);
         }
         else{
-            if(valueseteven.size()){
-                auto it=*(valueseteven.begin());
-                ll currans=-2*a[i-1]+i+it; //sdfsd
-                ans=max(ans,currans);
+            ans[i]=i+1;
+            while(qt.size()){
+                ll pos=qt.front();
+                ll val=st.top();
+                ans[pos]=val;
+                qt.pop();
+                st.pop();
             }
-            if(normalsetodd.size()!=0){ //sdfsd
-                auto it=*(normalsetodd.begin());
-                ll currans=i-it;
-                ans=max(ans,currans);
-            }
-            normalsetodd.insert(i); //sdfsd
-            valuesetodd.insert(2*a[i-1]+i); //sdfsd
         }
     }
-    ll cre=0;
-    for(int i=0;i<n;i++){
-        if(i%2==0) cre+=a[i];
-        else cre-=a[i];
+    while(qt.size()){
+        ll pos=qt.front();
+        ll val=st.top();
+        ans[pos]=val;
+        qt.pop();
+        st.pop();
     }
-    cout<<cre+ans<<endl;
+    cout<<"YES\n";
+    print(ans);
 }
 
 int main() {
