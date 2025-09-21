@@ -93,13 +93,82 @@ vi g[N];
 
 //fahad.cpp
 
+void fillrange(vector<ll>& ans,int left,int right,int valright,int valleft){
+    for(int i=left;i<=right;i++){
+        ans[i]=valleft+i-left;
+    }
+}
 void karke_dekhte_hain(){
     ll i=0,j=0,k=0,q=0,n=0,m=0,count=0;
     vector<vector<ll>> v;
     vector<ll> a,b;
     string s,s1,s2;
-    cin>>n;
-    cout<<2*n<<endl;
+    cin>>n>>m;
+    ll siz=m-n+1;
+    m++;
+    ll copyt=n;
+    vector<ll> ans(siz,0);
+    ll filled=0;
+    ll currleft=0;
+    ll currright=siz-1;
+    ll add=0;
+    while(filled<siz){
+        // deb1(filled);
+        ll clp2=log2(m);
+        ll trp=pow(2,clp2);
+        // deb2(n,m);
+        //range1 is l if from 
+        if(n>=trp){
+            // deb1(343);
+            n-=trp;
+            m-=trp;
+            add+=trp;
+        }
+        else if(n>=2*trp-m){
+            // deb1(555);
+            ll currfill=0;
+            // deb2(n,2*trp-n);
+            for(int i=n;i<2*trp-n;i++){
+                ans[currleft+i-n]=2*trp-i-1+add;
+                currfill++;
+                filled++;
+            }
+            currleft+=currfill;
+            n=n+currfill;
+        }
+        else{ 
+            if(m==trp){
+                // deb1(54);
+                    ll currfill=0;
+                    for(int i=0;i<m-n;i++){
+                        ans[currright-i]=i+add+n;
+                        // deb1(i);
+                        currfill++;
+                        filled++;
+                    }
+                    currright-=currfill;
+                
+            }  
+            else{
+                // deb1(51);
+                ll currfill=0;
+                for(int i=2*trp-m;i<m;i++){
+                    ans[currright+2*trp-m-i]=i+add;
+                    currfill++;
+                    filled++;
+                }
+                currright-=currfill;
+                m=m-currfill; 
+            }      
+        }
+        // prnt(ans);
+    }
+    ll ans1=0;
+    for(ll i=0;i<ans.size();i++){
+        ans1+=(ans[i]|(i+copyt));
+    }
+    cout<<ans1<<endl;
+    prnt(ans);
 }
 
 int main() {
