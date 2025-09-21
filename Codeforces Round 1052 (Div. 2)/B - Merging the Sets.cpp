@@ -98,8 +98,39 @@ void karke_dekhte_hain(){
     vector<vector<ll>> v;
     vector<ll> a,b;
     string s,s1,s2;
-    cin>>n;
-    cout<<2*n<<endl;
+    cin>>n>>m;
+    set<ll> checker;
+    vector<vector<ll>> vip;
+    map<ll,ll> mp;
+    for(int i=0;i<n;i++){
+        cin>>k;
+        vector<ll> local;
+        for(int j=0;j<k;j++){
+            ll ktr;
+            cin>>ktr;
+            local.pb(ktr);
+            checker.insert(ktr);
+            mp[ktr]++;
+        }
+        vip.pb(local);
+    }
+    if(checker.size()==m){
+        ll cnt=0;
+        for(int i=0;i<n;i++){
+            int flag=1;
+            for(int j=0;j<vip[i].size();j++){
+                if(mp[vip[i][j]]==1){
+                    flag=0;
+                }
+            }
+            if(flag==1) cnt++;
+        }
+        if(cnt>=2) cout<<"YES\n";
+        else cout<<"NO\n";
+    }
+    else{
+        cout<<"NO\n";
+    }
 }
 
 int main() {
