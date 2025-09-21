@@ -93,19 +93,38 @@ vi g[N];
 
 //fahad.cpp
 
+void fillrange(vector<ll>& ans,int left,int right){
+    for(int i=left;i<=right;i++){
+        ans[i]=right+left-i;
+    }
+}
 void karke_dekhte_hain(){
     ll i=0,j=0,k=0,q=0,n=0,m=0,count=0;
     vector<vector<ll>> v;
     vector<ll> a,b;
     string s,s1,s2;
-    cin>>n;
-    cin>>s;
-    s1=s;
-    sort(all(s1));
-    for(int i=0;i<n;i++){
-        if(s[i]!=s1[i]) count++;
+    cin>>n>>m;
+    m++;
+    vector<ll> ans(m,0);
+    while(m){
+        ll clp2=log2(m);
+        ll trp=pow(2,clp2);
+        if(trp==m){
+            fillrange(ans,0,m-1);
+            m=0;
+        }
+        else{   
+            ll kt=m-2*(m-trp);         
+            fillrange(ans,kt,m-1);
+            m-=2*(m-trp);
+        }
     }
-    cout<<count/2<<endl;
+    ll ans1=0;
+    for(ll i=0;i<ans.size();i++){
+        ans1+=(ans[i]|i);
+    }
+    cout<<ans1<<endl;
+    prnt(ans);
 }
 
 int main() {
