@@ -92,58 +92,72 @@ const int N = 3e5, M = N;
 vi g[N];
 
 //fahad.cpp
-vector<ll> oddmax(ll n){
-    if(n==1){
-        return {1,1};
-    }
-    ll first_av=1;
-    ll second_av=2;
-    vector<ll> ans;
-    ans.pb(1);
-    ans.pb(2);
-    ll num1=3;
-    ll num2=1;
-    for(int i=2;i<2*n-2;i++){
-        if(i%2==0){
-            ans.pb(num1);
-            num1++;
-        }
-        else{
-            ans.pb(num2);
-            num2++;
-        }
-    }
-    ans.pb(n-1);
-    ans.pb(n);
-    return ans;
-}
+
 void karke_dekhte_hain(){
     ll i=0,j=0,k=0,q=0,n=0,m=0,count=0,count1=0;
     vector<vector<ll>> v;
     vector<ll> a,b;
     string s,s1,s2;
-    cin>>n>>k;
-    if(k<n|k>=2*n){
-        cout<<"NO\n";
+    cin>>n;
+    for(int i=0;i<n;i++){
+        cin>>j;
+        a.pb(j);
     }
-    else{
-        if(k==2*n-1){
-            cout<<"YES\n";
-            vector<ll> ans=oddmax(n);
-            prnt(ans);
+    vector<pair<ll,ll>> vip;
+    count=1;
+    for(int i=1;i<n;i++){
+        if(a[i]!=a[i-1]){
+            vip.pb({a[i-1],count});
+            count=1;
         }
         else{
-            ll freepair=2*n-k-1;
-            ll od2=n-freepair;
-            cout<<"YES\n";
-            vector<ll> ans=oddmax(od2);
-            for(int i=od2+1;i<=n;i++){
-                ans.pb(i);
-                ans.pb(i);
-            }
-            prnt(ans);
+            count++;
         }
     }
+    vip.pb({a[n-1],count});
+    ll ans=n;
+    set<ll> last_set;
+    last_set.insert(a[0]);
+    map<ll,ll> mp1;
+    mp1[a[0]]=0;
+    vector<ll> ansss(n,-1);
+    for(int i=1;i<n;i++){
+        ll curr_branch=a[i];
+        mp1[a[i]]=i;
+        if(last_set.find(curr_branch-1) != last_set.end()){
+            ans-=1;
+            vector<ll> rem;
+            for(auto it: last_set){
+                ll value=(it);
+                if(value>curr_branch) rem.pb(it);
+            }
+            for(auto it: rem){
+                last_set.erase(it);
+            }
+            last_set.insert(a[i]);
+            ansss[i]=mp1[a[i]-1];
+        }
+        else{
+            last_set.clear();
+            last_set.insert(a[i]);
+        }
+    }
+    ll maxans=0;
+    for(int i=1;i<=n;i++){
+        ll i1=i;
+        ll curr=i1*(i1+1);
+        ll i2=2;
+        curr/=2;
+        maxans+=curr;
+    }
+    for(int i=0;i<n;i++){
+        if(ansss[i]!=-1){
+            ll left=ansss[i]+1;
+            ll right=n-i;
+            maxans-=(left*right);
+        }
+    }
+    cout<<maxans<<endl;
 }
 
 int main() {
